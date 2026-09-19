@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: inquirely-postgres
+    restart: unless-stopped
+    # 5433 on the host so this never collides with a system Postgres.
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: inquirely
+      POSTGRES_PASSWORD: inquirely
+      POSTGRES_DB: inquirely
+    volumes:
+      - inquirely-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U inquirely -d inquirely"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  inquirely-pgdata:
