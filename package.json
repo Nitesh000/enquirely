@@ -17,6 +17,7 @@
     "db:reset": "docker compose down -v && docker compose up -d && sleep 5 && drizzle-kit migrate"
   },
   "dependencies": {
+    "better-auth": "^1.7.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cn": "^0.4.0",
