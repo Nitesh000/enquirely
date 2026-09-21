@@ -7,6 +7,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-subtle: var(--brand-subtle);
+  --color-brand-muted: var(--brand-muted);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
@@ -66,12 +70,21 @@
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --ring: oklch(0.55 0.22 276);
+
+  /* Inquirely brand. Primary stays near-black (shadcn's look); `brand` is the
+     violet used for accents, links and the marketing site. Form themes in the
+     builder override their own tokens and must not read these. */
+  --brand: oklch(0.55 0.22 276);
+  --brand-foreground: oklch(0.985 0 0);
+  --brand-subtle: oklch(0.96 0.02 276);
+  --brand-muted: oklch(0.45 0.18 276);
+
+  --chart-1: oklch(0.55 0.22 276);
+  --chart-2: oklch(0.65 0.18 220);
+  --chart-3: oklch(0.72 0.15 170);
+  --chart-4: oklch(0.75 0.16 85);
+  --chart-5: oklch(0.65 0.2 15);
   --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
@@ -101,12 +114,18 @@
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --ring: oklch(0.65 0.2 276);
+
+  --brand: oklch(0.66 0.2 277);
+  --brand-foreground: oklch(0.145 0 0);
+  --brand-subtle: oklch(0.28 0.06 277);
+  --brand-muted: oklch(0.78 0.12 277);
+
+  --chart-1: oklch(0.66 0.2 277);
+  --chart-2: oklch(0.7 0.16 220);
+  --chart-3: oklch(0.76 0.14 170);
+  --chart-4: oklch(0.8 0.15 85);
+  --chart-5: oklch(0.7 0.19 15);
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);
@@ -126,5 +145,24 @@
   }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
   }
+  ::selection {
+    @apply bg-brand/20;
+  }
+}
+
+/* Respondents answering a form should never see a scroll jump mid-question,
+   and nobody should get motion they did not ask for. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 56px 56px;
 }
