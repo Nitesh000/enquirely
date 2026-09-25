@@ -82,7 +82,9 @@ export function RuntimePreview() {
         </div>
       </div>
 
-      <div className="relative h-[19rem] px-6 py-8 sm:px-10">
+      {/* Fixed height so the card does not resize between questions --- tall
+          enough for the longest step (four choices plus the hint). */}
+      <div className="relative h-[24rem] px-6 py-8 sm:px-10">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={step}
