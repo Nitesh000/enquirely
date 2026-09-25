@@ -171,24 +171,17 @@ export function RuntimePreview() {
 }
 
 function TypedAnswer({ text, instant }: { text: string; instant: boolean }) {
-  const [shown, setShown] = useState(instant ? text : "");
+  // Remounted on every step (the parent keys on `step`), so the count always
+  // starts at zero without an effect resetting it.
+  const [typed, setTyped] = useState(0);
 
   useEffect(() => {
-    if (instant) {
-      setShown(text);
-      return;
-    }
+    if (instant || typed >= text.length) return;
+    const timer = setTimeout(() => setTyped(typed + 1), 34);
+    return () => clearTimeout(timer);
+  }, [instant, typed, text.length]);
 
-    setShown("");
-    let i = 0;
-    const timer = setInterval(() => {
-      i += 1;
-      setShown(text.slice(0, i));
-      if (i >= text.length) clearInterval(timer);
-    }, 34);
-
-    return () => clearInterval(timer);
-  }, [text, instant]);
+  const shown = instant ? text : text.slice(0, typed);
 
   return (
     <span>
