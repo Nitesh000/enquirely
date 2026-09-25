@@ -20,18 +20,18 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Inquirely --- Forms worth answering",
+    default: "Inquirely — Forms worth answering",
     template: "%s · Inquirely",
   },
   description:
-    "Describe the survey you need and Inquirely writes it, one question at a time, beautiful to answer on any device --- then tells you what the answers mean.",
+    "Describe the survey you need and Inquirely writes it, one question at a time, beautiful to answer on any device — then tells you what the answers mean.",
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
   ),
   openGraph: {
     type: "website",
     siteName: "Inquirely",
-    title: "Inquirely --- Forms worth answering",
+    title: "Inquirely — Forms worth answering",
     description:
       "Describe the survey you need. Inquirely writes it, makes it a joy to answer, and tells you what the answers mean.",
   },

@@ -39,7 +39,7 @@ const features = [
   {
     icon: BarChart3Icon,
     title: "Results the moment they land",
-    body: "Completion rate, drop-off per question, distributions and averages --- computed from your data, not estimated. Filter with the same conditions your logic uses.",
+    body: "Completion rate, drop-off per question, distributions and averages — computed from your data, not estimated. Filter with the same conditions your logic uses.",
   },
   {
     icon: FileSpreadsheetIcon,
@@ -198,7 +198,7 @@ export default function HomePage() {
               align="start"
               eyebrow="Analysis"
               title="Ask your responses a question"
-              description="Two hundred free-text answers is not data, it is homework. Ask what you want to know and get an answer you can check --- every claim links back to the responses it came from."
+              description="Two hundred free-text answers is not data, it is homework. Ask what you want to know and get an answer you can check — every claim links back to the responses it came from."
             />
 
             <ul className="mt-8 space-y-4">
