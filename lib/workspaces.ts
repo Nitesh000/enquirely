@@ -4,23 +4,7 @@ import { and, asc, eq } from "drizzle-orm";
 
 import { db } from "@/lib/db";
 import { workspaceMembers, workspaces, type Workspace } from "@/lib/db/schema";
-
-/** Lowercase, hyphenated, ASCII-safe. Falls back to "workspace" if empty. */
-export function slugify(input: string): string {
-  const slug = input
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 40);
-
-  return slug || "workspace";
-}
-
-function randomSuffix(): string {
-  return Math.random().toString(36).slice(2, 8);
-}
+import { randomSuffix, slugify } from "@/lib/slug";
 
 /**
  * Creates a user's personal workspace and their `owner` membership.
@@ -38,7 +22,7 @@ export async function createPersonalWorkspace({
   email: string;
 }): Promise<Workspace> {
   const displayName = name.trim() || email.split("@")[0];
-  const base = slugify(displayName);
+  const base = slugify(displayName, "workspace");
 
   return db.transaction(async (tx) => {
     let workspace: Workspace | undefined;
