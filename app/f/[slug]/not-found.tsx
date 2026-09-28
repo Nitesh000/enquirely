@@ -19,7 +19,7 @@ export default function FormNotFound() {
         href="/"
         className="mt-8 text-sm font-medium underline-offset-4 hover:underline"
       >
-        What is Inquirely?
+        What is Enquirely?
       </Link>
     </main>
   );

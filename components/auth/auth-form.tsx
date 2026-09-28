@@ -49,7 +49,7 @@ export function AuthForm({
       return;
     }
 
-    toast.success(isSignUp ? "Welcome to Inquirely" : "Welcome back");
+    toast.success(isSignUp ? "Welcome to Enquirely" : "Welcome back");
     router.push(AFTER_AUTH);
     router.refresh();
   }
@@ -156,7 +156,7 @@ export function AuthForm({
       </form>
 
       <p className="mt-6 text-center text-sm text-muted-foreground">
-        {isSignUp ? "Already have an account? " : "New to Inquirely? "}
+        {isSignUp ? "Already have an account? " : "New to Enquirely? "}
         <Link
           href={isSignUp ? "/sign-in" : "/sign-up"}
           className="font-medium text-foreground underline-offset-4 hover:underline"

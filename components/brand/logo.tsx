@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 /**
  * PLACEHOLDER MARK --- replace when the real logo lands.
@@ -46,7 +47,7 @@ export function Wordmark({ className }: { className?: string }) {
         className,
       )}
     >
-      Inquirely
+      Enquirely
     </span>
   );
 }
@@ -68,8 +69,47 @@ export function Logo({
         className,
       )}
     >
-      <LogoMark />
-      {showWordmark ? <Wordmark /> : <span className="sr-only">Inquirely</span>}
+      <Image
+        src={"/favicon-32x32.png"}
+        height={32}
+        width={32}
+        alt="Enquirely"
+        className="rounded-md"
+      />
+      {showWordmark ? <Wordmark /> : <span className="sr-only">Enquirely</span>}
+    </Link>
+  );
+}
+
+export function LogoMedium({
+  className,
+  href = "/",
+  showWordmark = true,
+}: {
+  className?: string;
+  href?: string;
+  showWordmark?: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "inline-flex items-center gap-2.5 rounded-md outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+        className,
+      )}
+    >
+      <Image
+        src={"/android-chrome-192x192.png"}
+        height={50}
+        width={50}
+        alt="Enquirely"
+        className="rounded-md"
+      />
+      {showWordmark ? (
+        <Wordmark className="text-4xl font-extrabold" />
+      ) : (
+        <span className="sr-only">Enquirely</span>
+      )}
     </Link>
   );
 }

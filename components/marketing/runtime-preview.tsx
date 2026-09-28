@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 /**
  * MARKETING MOCK --- not the form runtime.
  *
- * This is a scripted loop that shows what answering an Inquirely form feels
+ * This is a scripted loop that shows what answering an Enquirely form feels
  * like. It has no engine, no validation and no state machine behind it.
  * The real runtime arrives in M2 under `components/form/` and must never
  * import from here (nor this from there): letting a marketing animation and
@@ -78,7 +78,7 @@ export function RuntimePreview() {
         <span className="size-2.5 rounded-full bg-border" />
         <span className="size-2.5 rounded-full bg-border" />
         <div className="ml-2 truncate rounded-md bg-background px-2.5 py-1 font-mono text-[11px] text-muted-foreground">
-          inquirely.com/f/onboarding-check
+          Enquirely.com/f/onboarding-check
         </div>
       </div>
 

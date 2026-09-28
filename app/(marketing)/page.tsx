@@ -19,7 +19,7 @@ const features = [
   {
     icon: SparklesIcon,
     title: "Describe it, don't build it",
-    body: "Say what you want to learn. Inquirely writes the questions, picks the right input for each one, and wires up the branching. Then you edit anything you disagree with.",
+    body: "Say what you want to learn. Enquirely writes the questions, picks the right input for each one, and wires up the branching. Then you edit anything you disagree with.",
   },
   {
     icon: KeyboardIcon,
@@ -103,7 +103,7 @@ export default function HomePage() {
             </h1>
 
             <p className="mx-auto mt-6 max-w-xl text-lg text-pretty text-muted-foreground">
-              Inquirely builds your survey from a sentence, makes answering it
+              Enquirely builds your survey from a sentence, makes answering it
               feel effortless on any device, and then tells you what the
               answers actually mean.
             </p>

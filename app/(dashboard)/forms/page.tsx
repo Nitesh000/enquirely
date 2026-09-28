@@ -42,7 +42,7 @@ export default async function FormsPage() {
           No forms yet
         </h2>
         <p className="mt-2 max-w-sm text-sm text-pretty text-muted-foreground">
-          Describe the survey you need and Inquirely will draft the questions,
+          Describe the survey you need and Enquirely will draft the questions,
           pick the right inputs and wire up the branching.
         </p>
 

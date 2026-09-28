@@ -72,7 +72,7 @@
   --input: oklch(0.922 0 0);
   --ring: oklch(0.55 0.22 276);
 
-  /* Inquirely brand. Primary stays near-black (shadcn's look); `brand` is the
+  /* Enquirely brand. Primary stays near-black (shadcn's look); `brand` is the
      violet used for accents, links and the marketing site. Form themes in the
      builder override their own tokens and must not read these. */
   --brand: oklch(0.55 0.22 276);

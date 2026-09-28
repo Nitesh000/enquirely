@@ -9,7 +9,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/80",
-        // Inquirely addition: the violet call-to-action used on marketing
+        // Enquirely addition: the violet call-to-action used on marketing
         // pages and for the primary action in the dashboard.
         brand:
           "bg-brand text-brand-foreground shadow-xs hover:bg-[color-mix(in_oklch,var(--brand),black_8%)] dark:hover:bg-[color-mix(in_oklch,var(--brand),white_8%)]",
@@ -29,7 +29,7 @@ const buttonVariants = cva(
         xs: "h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
         sm: "h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
         lg: "h-9 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
-        // Inquirely addition: hero and form-runtime scale.
+        // Enquirely addition: hero and form-runtime scale.
         xl: "h-11 gap-2 rounded-xl px-5 text-[0.9375rem]",
         icon: "size-8",
         "icon-xs":

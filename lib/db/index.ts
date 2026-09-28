@@ -15,11 +15,11 @@ import * as schema from "./schema";
  * after a few minutes of editing.
  */
 const globalForDb = globalThis as unknown as {
-  inquirelySql: ReturnType<typeof postgres> | undefined;
+  EnquirelySql: ReturnType<typeof postgres> | undefined;
 };
 
 const sql =
-  globalForDb.inquirelySql ??
+  globalForDb.EnquirelySql ??
   postgres(env.DATABASE_URL, {
     // Serverless-friendly: one connection per instance, short idle timeout.
     max: env.NODE_ENV === "production" ? 1 : 5,
@@ -27,7 +27,7 @@ const sql =
   });
 
 if (env.NODE_ENV !== "production") {
-  globalForDb.inquirelySql = sql;
+  globalForDb.EnquirelySql = sql;
 }
 
 export const db = drizzle(sql, { schema, casing: "snake_case" });
