@@ -51,8 +51,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">
+      <body className="flex flex-col min-h-full">
         <ThemeProvider>
+          <div className="flex justify-center p-2 py-1 bg-[#8889F3]/50">
+            <p className="font-mono font-medium tracking-wider">
+              This project is currently under development.
+            </p>
+          </div>
           {children}
           <Toaster position="top-center" richColors />
         </ThemeProvider>
