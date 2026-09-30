@@ -17,7 +17,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { signOut } from "@/lib/auth-client";
+import { signOut } from "@/lib/auth/auth-client";
 
 export function UserMenu({
   name,
@@ -63,7 +63,7 @@ export function UserMenu({
       <DropdownMenuContent align="end" className="w-60">
         <DropdownMenuLabel className="flex flex-col gap-0.5">
           <span className="text-sm font-medium">{name}</span>
-          <span className="truncate text-xs font-normal text-muted-foreground">
+          <span className="text-xs font-normal truncate text-muted-foreground">
             {email}
           </span>
         </DropdownMenuLabel>

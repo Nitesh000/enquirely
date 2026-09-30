@@ -1,7 +1,7 @@
 import { Logo } from "@/components/brand/logo";
 import { SidebarNav } from "@/components/dashboard/sidebar-nav";
 import { UserMenu } from "@/components/dashboard/user-menu";
-import { requireWorkspace } from "@/lib/session";
+import { requireWorkspace } from "@/lib/auth/session";
 
 /**
  * Authenticated shell.
@@ -14,13 +14,13 @@ export default async function DashboardLayout({ children }: LayoutProps<"/">) {
   const { session, workspace } = await requireWorkspace();
 
   return (
-    <div className="flex min-h-full flex-1 flex-col">
+    <div className="flex flex-col flex-1 min-h-full">
       <header className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur-md">
-        <div className="flex h-14 items-center gap-3 px-4 sm:px-6">
+        <div className="flex gap-3 items-center px-4 h-14 sm:px-6">
           <Logo href="/forms" />
 
           <span
-            className="hidden truncate rounded-md bg-muted px-2 py-1 text-xs text-muted-foreground sm:inline"
+            className="hidden py-1 px-2 text-xs rounded-md sm:inline truncate bg-muted text-muted-foreground"
             title={workspace.name}
           >
             {workspace.name}
@@ -36,12 +36,12 @@ export default async function DashboardLayout({ children }: LayoutProps<"/">) {
         </div>
       </header>
 
-      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:flex-row lg:gap-10">
-        <aside className="lg:w-52 lg:shrink-0 lg:pt-1">
+      <div className="flex flex-col flex-1 gap-6 py-6 px-4 mx-auto w-full max-w-7xl sm:px-6 lg:flex-row lg:gap-10">
+        <aside className="lg:pt-1 lg:w-52 lg:shrink-0">
           <SidebarNav />
         </aside>
 
-        <main className="min-w-0 flex-1 pb-12">{children}</main>
+        <main className="flex-1 pb-12 min-w-0">{children}</main>
       </div>
     </div>
   );

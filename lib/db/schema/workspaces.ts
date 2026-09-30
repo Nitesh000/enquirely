@@ -12,8 +12,6 @@ import {
 import { users } from "./auth";
 
 /**
- * Every user gets one personal workspace at signup (see `lib/workspaces.ts`).
- *
  * `workspace_members` exists so that multi-user workspaces are a feature
  * decision later rather than a migration nightmare later. Per plan.md §27
  * there is deliberately NO team UI, no invitations, and no permission checks

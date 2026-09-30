@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { requireWorkspace } from "@/lib/session";
+import { requireWorkspace } from "@/lib/auth/session";
 
 export const metadata: Metadata = { title: "Settings" };
 
@@ -26,10 +26,7 @@ export default async function SettingsPage() {
 
   return (
     <>
-      <PageHeader
-        title="Settings"
-        description="Your account and workspace."
-      />
+      <PageHeader title="Settings" description="Your account and workspace." />
 
       <Card className="max-w-xl [--card-spacing:--spacing(6)]">
         <CardContent className="space-y-5">

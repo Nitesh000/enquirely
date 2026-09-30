@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signIn, signUp } from "@/lib/auth-client";
+import { signIn, signUp } from "@/lib/auth/auth-client";
 
 const AFTER_AUTH = "/forms";
 
@@ -63,8 +63,8 @@ export function AuthForm({
   }
 
   return (
-    <div className="rounded-2xl border bg-card p-6 shadow-sm">
-      <h1 className="font-heading text-xl font-semibold tracking-tight">
+    <div className="p-6 rounded-2xl border shadow-sm bg-card">
+      <h1 className="text-xl font-semibold tracking-tight font-heading">
         {isSignUp ? "Create your account" : "Sign in"}
       </h1>
       <p className="mt-1 text-sm text-muted-foreground">
@@ -87,10 +87,10 @@ export function AuthForm({
             Continue with GitHub
           </Button>
 
-          <div className="my-6 flex items-center gap-3">
-            <span className="h-px flex-1 bg-border" />
+          <div className="flex gap-3 items-center my-6">
+            <span className="flex-1 h-px bg-border" />
             <span className="text-xs text-muted-foreground">or</span>
-            <span className="h-px flex-1 bg-border" />
+            <span className="flex-1 h-px bg-border" />
           </div>
         </>
       ) : null}
@@ -155,11 +155,11 @@ export function AuthForm({
         </Button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-muted-foreground">
+      <p className="mt-6 text-sm text-center text-muted-foreground">
         {isSignUp ? "Already have an account? " : "New to Enquirely? "}
         <Link
           href={isSignUp ? "/sign-in" : "/sign-up"}
-          className="font-medium text-foreground underline-offset-4 hover:underline"
+          className="font-medium hover:underline text-foreground underline-offset-4"
         >
           {isSignUp ? "Sign in" : "Create one"}
         </Link>

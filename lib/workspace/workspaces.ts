@@ -4,7 +4,7 @@ import { and, asc, eq } from "drizzle-orm";
 
 import { db } from "@/lib/db";
 import { workspaceMembers, workspaces, type Workspace } from "@/lib/db/schema";
-import { randomSuffix, slugify } from "@/lib/slug";
+import { randomSuffix, slugify } from "@/lib/utils/slug";
 
 /**
  * Creates a user's personal workspace and their `owner` membership.

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Button } from "@/components/ui/button";
-import { requireWorkspace } from "@/lib/session";
+import { requireWorkspace } from "@/lib/auth/session";
 
 export const metadata: Metadata = { title: "Forms" };
 
@@ -33,8 +33,8 @@ export default async function FormsPage() {
         }
       />
 
-      <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed px-6 py-20 text-center">
-        <span className="inline-grid size-12 place-items-center rounded-2xl bg-brand/10 text-brand">
+      <div className="flex flex-col justify-center items-center py-20 px-6 text-center rounded-2xl border border-dashed">
+        <span className="inline-grid place-items-center rounded-2xl size-12 bg-brand/10 text-brand">
           <SparklesIcon className="size-6" />
         </span>
 
@@ -46,7 +46,7 @@ export default async function FormsPage() {
           pick the right inputs and wire up the branching.
         </p>
 
-        <div className="mt-6 flex flex-col gap-2 sm:flex-row">
+        <div className="flex flex-col gap-2 mt-6 sm:flex-row">
           <Button variant="brand" disabled>
             <SparklesIcon />
             Generate with AI

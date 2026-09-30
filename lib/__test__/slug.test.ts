@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { randomSuffix, slugify } from "./slug";
+import { randomSuffix, slugify } from "../utils/slug";
 
 describe("slugify", () => {
   const cases: Array<[input: string, expected: string]> = [

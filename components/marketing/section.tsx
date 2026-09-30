@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 
 /** Shared page rhythm, so sections cannot drift apart over time. */
 export function Section({
@@ -14,7 +14,7 @@ export function Section({
 }) {
   return (
     <section id={id} className={cn("scroll-mt-20 py-20 sm:py-28", className)}>
-      <div className="mx-auto w-full max-w-6xl px-6">{children}</div>
+      <div className="px-6 mx-auto w-full max-w-6xl">{children}</div>
     </section>
   );
 }
@@ -38,15 +38,15 @@ export function SectionHeading({
       )}
     >
       {eyebrow ? (
-        <p className="mb-3 font-mono text-xs tracking-widest text-brand uppercase">
+        <p className="mb-3 font-mono text-xs tracking-widest uppercase text-brand">
           {eyebrow}
         </p>
       ) : null}
-      <h2 className="font-heading text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+      <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl font-heading text-balance">
         {title}
       </h2>
       {description ? (
-        <p className="mt-4 text-base text-pretty text-muted-foreground sm:text-lg">
+        <p className="mt-4 text-base sm:text-lg text-pretty text-muted-foreground">
           {description}
         </p>
       ) : null}

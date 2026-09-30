@@ -3,7 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 
 /**
  * MARKETING MOCK --- not the form runtime.
@@ -68,23 +68,23 @@ export function RuntimePreview() {
 
   return (
     <div
-      className="relative overflow-hidden rounded-2xl border bg-card shadow-xl shadow-black/[0.06] dark:shadow-black/40"
+      className="overflow-hidden relative rounded-2xl border shadow-xl bg-card shadow-black/[0.06] dark:shadow-black/40"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
       {/* Browser chrome, so it reads as "a real form at a real URL". */}
-      <div className="flex items-center gap-2 border-b bg-muted/40 px-4 py-3">
-        <span className="size-2.5 rounded-full bg-border" />
-        <span className="size-2.5 rounded-full bg-border" />
-        <span className="size-2.5 rounded-full bg-border" />
-        <div className="ml-2 truncate rounded-md bg-background px-2.5 py-1 font-mono text-[11px] text-muted-foreground">
+      <div className="flex gap-2 items-center py-3 px-4 border-b bg-muted/40">
+        <span className="rounded-full size-2.5 bg-border" />
+        <span className="rounded-full size-2.5 bg-border" />
+        <span className="rounded-full size-2.5 bg-border" />
+        <div className="py-1 px-2.5 ml-2 font-mono rounded-md truncate bg-background text-[11px] text-muted-foreground">
           Enquirely.com/f/onboarding-check
         </div>
       </div>
 
       {/* Fixed height so the card does not resize between questions --- tall
           enough for the longest step (four choices plus the hint). */}
-      <div className="relative h-[24rem] px-6 py-8 sm:px-10">
+      <div className="relative py-8 px-6 sm:px-10 h-[24rem]">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={step}
@@ -97,7 +97,7 @@ export function RuntimePreview() {
             <p className="mb-3 font-mono text-xs text-brand">
               {question.index} &rarr;
             </p>
-            <h3 className="text-xl font-semibold tracking-tight text-balance sm:text-2xl">
+            <h3 className="text-xl font-semibold tracking-tight sm:text-2xl text-balance">
               {question.prompt}
             </h3>
 
@@ -150,18 +150,23 @@ export function RuntimePreview() {
               ) : null}
 
               {question.kind === "text" ? (
-                <div className="border-b-2 border-brand pb-2 text-lg">
-                  <TypedAnswer text={question.answer} instant={!!reducedMotion} />
+                <div className="pb-2 text-lg border-b-2 border-brand">
+                  <TypedAnswer
+                    text={question.answer}
+                    instant={!!reducedMotion}
+                  />
                 </div>
               ) : null}
             </div>
 
-            <p className="mt-6 text-xs text-muted-foreground">{question.hint}</p>
+            <p className="mt-6 text-xs text-muted-foreground">
+              {question.hint}
+            </p>
           </motion.div>
         </AnimatePresence>
       </div>
 
-      <div className="h-1 w-full bg-muted">
+      <div className="w-full h-1 bg-muted">
         <motion.div
           className="h-full bg-brand"
           animate={{ width: `${progress * 100}%` }}
@@ -189,7 +194,7 @@ function TypedAnswer({ text, instant }: { text: string; instant: boolean }) {
     <span>
       {shown}
       {!instant && shown.length < text.length ? (
-        <span className="ml-0.5 inline-block h-5 w-px animate-pulse bg-brand align-middle" />
+        <span className="inline-block ml-0.5 w-px h-5 align-middle animate-pulse bg-brand" />
       ) : null}
     </span>
   );

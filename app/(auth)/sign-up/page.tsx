@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { AuthForm } from "@/components/auth/auth-form";
-import { githubOAuthEnabled } from "@/lib/env";
+import { githubOAuthEnabled } from "@/lib/config/env";
 
 export const metadata: Metadata = { title: "Create your account" };
 

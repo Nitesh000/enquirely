@@ -6,8 +6,8 @@ import { nextCookies } from "better-auth/next-js";
 
 import { db } from "@/lib/db";
 import { accounts, sessions, users, verifications } from "@/lib/db/schema";
-import { env, githubOAuthEnabled } from "@/lib/env";
-import { createPersonalWorkspace } from "@/lib/workspaces";
+import { env, githubOAuthEnabled } from "@/lib/config/env";
+import { createPersonalWorkspace } from "@/lib/workspace/workspaces";
 
 export const auth = betterAuth({
   secret: env.BETTER_AUTH_SECRET,
