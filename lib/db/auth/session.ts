@@ -4,8 +4,8 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 
-import { auth, type Session } from "@/lib/auth/auth";
-import { getActiveWorkspace } from "@/lib/workspace/workspaces";
+import { auth, type Session } from "@/lib/db/auth/auth";
+import { getActiveWorkspace } from "@/lib/db/workspace/workspaces";
 import type { Workspace } from "@/lib/db/schema";
 
 /**

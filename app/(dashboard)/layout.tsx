@@ -1,7 +1,7 @@
 import { Logo } from "@/components/brand/logo";
 import { SidebarNav } from "@/components/dashboard/sidebar-nav";
 import { UserMenu } from "@/components/dashboard/user-menu";
-import { requireWorkspace } from "@/lib/auth/session";
+import { requireWorkspace } from "@/lib/db/auth/session";
 
 /**
  * Authenticated shell.

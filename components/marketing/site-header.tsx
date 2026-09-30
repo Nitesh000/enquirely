@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
-import { getSession } from "@/lib/auth/session";
+import { getSession } from "@/lib/db/auth/session";
 
 const navigation = [
   { href: "/#how-it-works", label: "How it works" },

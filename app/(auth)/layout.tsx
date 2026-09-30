@@ -1,8 +1,7 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { Logo, LogoMark, LogoMedium, Wordmark } from "@/components/brand/logo";
-import { getSession } from "@/lib/auth/session";
+import { LogoMedium } from "@/components/brand/logo";
+import { getSession } from "@/lib/db/auth/session";
 
 export default async function AuthLayout({ children }: LayoutProps<"/">) {
   // Already signed in? The sign-in page has nothing to offer.

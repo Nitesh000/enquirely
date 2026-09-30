@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { requireWorkspace } from "@/lib/auth/session";
+import { requireWorkspace } from "@/lib/db/auth/session";
 
 export const metadata: Metadata = { title: "Settings" };
 
