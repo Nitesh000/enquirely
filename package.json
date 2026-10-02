@@ -17,7 +17,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:reset": "docker compose down -v && docker compose up -d && sleep 5 && drizzle-kit migrate"
+    "db:reset": "docker compose down -v && docker compose up -d && sleep 5 && drizzle-kit migrate",
+    "db:seed": "tsx scripts/seed.ts"
   },
   "dependencies": {
     "better-auth": "^1.7.6",
