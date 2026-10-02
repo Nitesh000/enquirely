@@ -1,5 +1,5 @@
-import { answerSchemaForBlock, answerValueSchema } from "@/lib/forms/answers";
-import { blockSchema, FormBlock } from "@/lib/forms/schema";
+import { answerValueSchema } from "@/lib/forms/answers";
+import { blockSchema } from "@/lib/forms/schema";
 import { describe, expect, it } from "vitest";
 
 describe("answerSchema", () => {
@@ -99,8 +99,6 @@ describe("answerSchema", () => {
   it.each(answerSchemaForBlockCases)(
     "answer schema for block",
     (input, output) => {
-      // const result = answerSchemaForBlock(input as FormBlock);
-      // console.log(">> input", input);
       expect(blockSchema.safeParse(input).success).toBe(output);
     },
   );

@@ -13,13 +13,9 @@ export type FormOperation =
   | { type: "delete_logic"; ruleId: string }
   | { type: "update_theme"; changes: Partial<FormTheme> };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function unknownTargetError(targetId: any, customErr?: string) {
-  if (targetId == -1) {
+function unknownTargetError(targetId: number, customErr?: string) {
+  if (targetId === -1) {
     throw new Error(customErr ?? "Target block not found");
-  }
-  if (targetId == undefined) {
-    throw new Error("Id undefined");
   }
 }
 
