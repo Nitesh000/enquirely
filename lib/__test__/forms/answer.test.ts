@@ -100,7 +100,7 @@ describe("answerSchema", () => {
     "answer schema for block",
     (input, output) => {
       // const result = answerSchemaForBlock(input as FormBlock);
-      console.log(">> input", input);
+      // console.log(">> input", input);
       expect(blockSchema.safeParse(input).success).toBe(output);
     },
   );
