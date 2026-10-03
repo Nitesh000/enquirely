@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { formatAnswerValue, getResponsePreview } from "@/lib/forms/format-answer";
-import type { FormBlock, FormDefinition } from "@/lib/forms/schema";
+import { formatAnswerValue } from "@/lib/forms/format-answer";
+import type { FormBlock } from "@/lib/forms/schema";
 
 const singleChoice: FormBlock = {
   id: "q1",
@@ -82,42 +82,5 @@ describe("formatAnswerValue", () => {
 
   it("returns an empty string for an undefined answer", () => {
     expect(formatAnswerValue(shortText, undefined)).toBe("");
-  });
-});
-
-describe("getResponsePreview", () => {
-  const definition: FormDefinition = {
-    version: 1,
-    title: "Test",
-    blocks: [shortText, singleChoice],
-    logic: [],
-    theme: {
-      preset: "minimal",
-      accentColor: "#000",
-      font: "Inter",
-      buttonStyle: "rounded",
-      animation: "subtle",
-    },
-  };
-
-  it("skips an unanswered leading block (q5) to find the next answered one (q1)", () => {
-    expect(getResponsePreview(definition, { q1: "google" })).toBe("Google");
-  });
-
-  it("prefers the earlier block (q5) over a later one (q1) when both are answered", () => {
-    expect(
-      getResponsePreview(definition, { q5: "Alice", q1: "google" }),
-    ).toBe("Alice");
-  });
-
-  it("reports (no answers) for a response with nothing filled in", () => {
-    expect(getResponsePreview(definition, {})).toBe("(no answers)");
-  });
-
-  it("truncates a long answer", () => {
-    const long = "a".repeat(100);
-    const preview = getResponsePreview(definition, { q5: long });
-    expect(preview.endsWith("…")).toBe(true);
-    expect(preview.length).toBe(81);
   });
 });

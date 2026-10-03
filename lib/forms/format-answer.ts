@@ -1,7 +1,5 @@
 import type { AnswerValue } from "./answers";
-import type { FormBlock, FormDefinition } from "./schema";
-
-const PREVIEW_MAX_LENGTH = 80;
+import type { FormBlock } from "./schema";
 
 /**
  * An answer as a human-readable string --- "Google", not the option id
@@ -44,25 +42,4 @@ export function formatAnswerValue(
         ? String(value)
         : "";
   }
-}
-
-/**
- * One-line summary for the response list: the first answered block,
- * formatted and truncated. "(no answers)" for a response abandoned before
- * the first question --- which is a real, expected state, not an error.
- */
-export function getResponsePreview(
-  definition: FormDefinition,
-  answers: Record<string, AnswerValue>,
-): string {
-  for (const block of definition.blocks) {
-    const text = formatAnswerValue(block, answers[block.id]);
-    if (text) {
-      return text.length > PREVIEW_MAX_LENGTH
-        ? `${text.slice(0, PREVIEW_MAX_LENGTH)}…`
-        : text;
-    }
-  }
-
-  return "(no answers)";
 }

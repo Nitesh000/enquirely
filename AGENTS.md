@@ -23,9 +23,11 @@ landed early because they depend only on M1. **M3, the builder, is core-done**
 and verified end-to-end in a real browser — create, edit, reorder, autosave,
 publish, answer at the public URL. Preview mode, the theme panel, and the
 share panel (QR) are the deliberately-deferred tail; see `next-steps.md` §1.
-**M5 is partial**: response list + detail view, workspace-scoped, rendered
-against the version each response actually answered. No `form_events`,
-search, filters, analytics, or exports yet.
+**M5 is partial**: a sortable/filterable response **table** (one column per
+question, sorted and filtered in SQL) plus a per-response detail view,
+workspace-scoped. Status filter and substring search are in; the GIN
+full-text search, per-block predicate filters, `form_events`, analytics and
+exports are not.
 Next: that M3 tail, the rest of M5, or M6 steps 5–6, which M3 was the only
 blocker for.
 

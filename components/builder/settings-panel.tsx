@@ -166,7 +166,11 @@ export function SettingsPanel() {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    // Keyed by block id for the same reason the canvas is: these fields keep
+    // local state that only commits on blur, and an unkeyed panel would carry
+    // one block's half-typed value over to the next block --- then write it
+    // there on the next blur.
+    <div key={block.id} className="flex flex-col gap-5">
       <div>
         <h2 className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
           Settings

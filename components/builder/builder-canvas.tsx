@@ -180,7 +180,14 @@ export function BuilderCanvas() {
 
       <div className="flex flex-1 items-start justify-center rounded-2xl border bg-card px-6 py-10 sm:px-10">
         <div className="w-full max-w-xl">
-          <EditableBlock block={block} />
+          {/*
+            Keyed by block id so switching questions remounts the editing
+            surface. Without it, every block shares one `useDebouncedField`
+            instance --- and therefore one pending-commit timer, which the
+            next block's first keystroke would clear, silently discarding
+            the title just typed.
+          */}
+          <EditableBlock key={block.id} block={block} />
         </div>
       </div>
     </div>
