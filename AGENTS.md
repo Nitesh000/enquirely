@@ -11,11 +11,16 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 # Inquirely
 
 Plan: `.agents/plan.md` (what). Build order + exit criteria: `.agents/steps.md`
-(how, in what order). Read `steps.md` §1 before adding a dependency — several
-choices are locked with reasons, and §2 explains why the build order differs
-from the plan's phases.
+(how, in what order). Receipt of what is actually built: `.agents/done.md`.
+How to approach what is left: `.agents/next-steps.md`. Read `steps.md` §1
+before adding a dependency — several choices are locked with reasons, and §2
+explains why the build order differs from the plan's phases.
 
-Current state: **M0 complete**. Next is M1, the form schema and engine.
+Current state: **M0, M1 complete. M2 built and verified** except haptics,
+the Playwright suite and the mobile `visualViewport` pass. **M6 steps 1–4**
+(AI models, schemas, the LangGraph generation graph, its streaming route)
+landed early because they depend only on M1. Next is **M3, the builder** —
+it blocks the rest of M6.
 
 ## Rules
 
