@@ -23,7 +23,11 @@ landed early because they depend only on M1. **M3, the builder, is core-done**
 and verified end-to-end in a real browser — create, edit, reorder, autosave,
 publish, answer at the public URL. Preview mode, the theme panel, and the
 share panel (QR) are the deliberately-deferred tail; see `next-steps.md` §1.
-Next: either that M3 tail, or M6 steps 5–6, which M3 was the only blocker for.
+**M5 is partial**: response list + detail view, workspace-scoped, rendered
+against the version each response actually answered. No `form_events`,
+search, filters, analytics, or exports yet.
+Next: that M3 tail, the rest of M5, or M6 steps 5–6, which M3 was the only
+blocker for.
 
 ## Rules
 

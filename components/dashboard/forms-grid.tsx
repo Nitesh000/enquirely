@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  BarChart3Icon,
   CopyIcon,
   ExternalLinkIcon,
   MoreHorizontalIcon,
@@ -112,7 +113,7 @@ export function FormsGrid({ initialForms }: { initialForms: FormListItem[] }) {
                   <MoreHorizontalIcon />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" className="w-44">
                 <DropdownMenuItem onSelect={() => handleRename(form)}>
                   <PencilIcon />
                   Rename
@@ -120,6 +121,17 @@ export function FormsGrid({ initialForms }: { initialForms: FormListItem[] }) {
                 <DropdownMenuItem onSelect={() => handleDuplicate(form)}>
                   <CopyIcon />
                   Duplicate
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href={`/forms/${form.id}/responses`} className="relative z-10">
+                    <BarChart3Icon />
+                    View responses
+                    {form.responseCount > 0 ? (
+                      <Badge variant="secondary" className="ml-auto">
+                        {form.responseCount}
+                      </Badge>
+                    ) : null}
+                  </Link>
                 </DropdownMenuItem>
                 {form.published ? (
                   <DropdownMenuItem asChild>
@@ -141,10 +153,19 @@ export function FormsGrid({ initialForms }: { initialForms: FormListItem[] }) {
             </DropdownMenu>
           </div>
 
-          <div className="px-4 pt-3">
+          <div className="flex items-center gap-2 px-4 pt-3">
             <Badge variant={form.published ? "secondary" : "outline"}>
               {form.published ? "Published" : "Draft"}
             </Badge>
+            {form.responseCount > 0 ? (
+              <Link
+                href={`/forms/${form.id}/responses`}
+                className="relative z-10 text-xs text-muted-foreground underline-offset-2 outline-none hover:text-foreground hover:underline focus-visible:underline"
+              >
+                {form.responseCount}{" "}
+                {form.responseCount === 1 ? "response" : "responses"}
+              </Link>
+            ) : null}
           </div>
         </Card>
       ))}

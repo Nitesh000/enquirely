@@ -179,6 +179,10 @@ function BuilderLayout({
         <SaveStatusIndicator status={status} />
 
         <div className="ml-auto flex items-center gap-3">
+          <Button variant="ghost" size="sm" asChild>
+            <Link href={`/forms/${formId}/responses`}>Responses</Link>
+          </Button>
+          <div className="h-5 w-px bg-border" />
           <UndoRedoButtons />
           <div className="h-5 w-px bg-border" />
           <PublishButton

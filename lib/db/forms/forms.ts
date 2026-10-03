@@ -1,9 +1,9 @@
 import "server-only";
 
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 
 import { db } from "@/lib/db";
-import { formVersions, forms } from "@/lib/db/schema";
+import { formVersions, forms, responses } from "@/lib/db/schema";
 import { randomSuffix, slugify } from "@/lib/utils/slug";
 import { formDefinitionSchema, type FormDefinition } from "@/lib/forms/schema";
 import { validateDefinition } from "@/lib/forms/validate-definition";
@@ -65,6 +65,7 @@ export type FormListItem = {
   blockCount: number;
   published: boolean;
   updatedAt: Date;
+  responseCount: number;
 };
 
 /** Every form in a workspace, most recently updated first --- AGENTS.md: every form query is workspace-scoped. */
@@ -79,9 +80,14 @@ export async function listFormsForWorkspace(
       definition: forms.definition,
       publishedVersionId: forms.publishedVersionId,
       updatedAt: forms.updatedAt,
+      // LEFT JOIN + count: a form with zero responses must still appear,
+      // not get dropped by an inner join.
+      responseCount: sql<number>`count(${responses.id})::int`,
     })
     .from(forms)
+    .leftJoin(responses, eq(responses.formId, forms.id))
     .where(eq(forms.workspaceId, workspaceId))
+    .groupBy(forms.id)
     .orderBy(desc(forms.updatedAt));
 
   return rows.map((row) => ({
@@ -91,6 +97,7 @@ export async function listFormsForWorkspace(
     blockCount: row.definition.blocks.length,
     published: row.publishedVersionId !== null,
     updatedAt: row.updatedAt,
+    responseCount: row.responseCount,
   }));
 }
 
