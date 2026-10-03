@@ -15,6 +15,8 @@ export function RatingBlock({
   onSubmit,
   autoFocus,
   error,
+  onTitleChange,
+  onDescriptionChange,
 }: BlockProps<"rating">) {
   const { max, style } = block.rating;
   const selected = asNumber(value);
@@ -40,6 +42,8 @@ export function RatingBlock({
       description={block.description}
       required={block.required}
       error={error}
+      onTitleChange={onTitleChange}
+      onDescriptionChange={onDescriptionChange}
       hint={
         <>
           Press <Kbd>1</Kbd>–<Kbd>{max > 9 ? "9" : max}</Kbd>, or use{" "}

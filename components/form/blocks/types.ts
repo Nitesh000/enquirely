@@ -31,6 +31,9 @@ export type BlockProps<T extends FormBlock["type"]> = {
   onSubmit: () => void;
   autoFocus?: boolean;
   error?: string;
+  /** Builder-only; see `QuestionShell`. Always `undefined` on the respondent runtime. */
+  onTitleChange?: (value: string) => void;
+  onDescriptionChange?: (value: string) => void;
 };
 
 /** Letters used as choice accelerators: A, B, C ... */

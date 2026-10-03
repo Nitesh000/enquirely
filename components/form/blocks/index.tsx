@@ -19,6 +19,8 @@ export type BlockRendererProps = {
   onSubmit: () => void;
   autoFocus?: boolean;
   error?: string;
+  onTitleChange?: (value: string) => void;
+  onDescriptionChange?: (value: string) => void;
 };
 
 /**

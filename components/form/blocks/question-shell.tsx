@@ -18,6 +18,8 @@ export function QuestionShell({
   error,
   hint,
   children,
+  onTitleChange,
+  onDescriptionChange,
 }: {
   blockId: string;
   title: string;
@@ -26,27 +28,62 @@ export function QuestionShell({
   error?: string;
   hint?: ReactNode;
   children: ReactNode;
+  /**
+   * Present only in the builder. When set, the title renders as a real
+   * input instead of static text --- "editing the title edits in place on
+   * the real component" (`steps.md` M3.4). The respondent runtime never
+   * passes this, so it never pays for it: no extra import, just one prop
+   * that's always `undefined` on that path.
+   */
+  onTitleChange?: (value: string) => void;
+  onDescriptionChange?: (value: string) => void;
 }) {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2.5">
-        <h2
-          id={`${blockId}-label`}
-          className="font-heading text-2xl font-semibold tracking-tight text-balance sm:text-[1.75rem] sm:leading-[1.2]"
-        >
-          {title}
-          {required ? (
-            <span
-              aria-hidden
-              className="ml-1.5 align-super text-base text-brand"
-            >
-              *
-            </span>
-          ) : null}
-          {required ? <span className="sr-only"> (required)</span> : null}
-        </h2>
+        {onTitleChange ? (
+          <div className="flex items-start gap-1.5">
+            <input
+              id={`${blockId}-label`}
+              value={title}
+              onChange={(event) => onTitleChange(event.target.value)}
+              placeholder="Question title"
+              className="w-full border-b border-transparent bg-transparent font-heading text-2xl font-semibold tracking-tight text-balance outline-none transition-colors placeholder:text-muted-foreground/50 hover:border-border focus-visible:border-brand sm:text-[1.75rem] sm:leading-[1.2]"
+            />
+            {required ? (
+              <span aria-hidden className="pt-1 text-base text-brand">
+                *
+              </span>
+            ) : null}
+          </div>
+        ) : (
+          <h2
+            id={`${blockId}-label`}
+            className="font-heading text-2xl font-semibold tracking-tight text-balance sm:text-[1.75rem] sm:leading-[1.2]"
+          >
+            {title}
+            {required ? (
+              <span
+                aria-hidden
+                className="ml-1.5 align-super text-base text-brand"
+              >
+                *
+              </span>
+            ) : null}
+            {required ? <span className="sr-only"> (required)</span> : null}
+          </h2>
+        )}
 
-        {description ? (
+        {onDescriptionChange ? (
+          <textarea
+            id={`${blockId}-description`}
+            rows={1}
+            value={description ?? ""}
+            onChange={(event) => onDescriptionChange(event.target.value)}
+            placeholder="Description (optional)"
+            className="w-full resize-none border-b border-transparent bg-transparent text-[0.9375rem] text-pretty text-muted-foreground outline-none transition-colors placeholder:text-muted-foreground/50 hover:border-border focus-visible:border-brand"
+          />
+        ) : description ? (
           <p
             id={`${blockId}-description`}
             className="max-w-prose text-[0.9375rem] text-pretty text-muted-foreground"

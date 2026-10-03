@@ -34,7 +34,16 @@ export const forms = pgTable(
     theme: jsonb("theme").$type<FormTheme>(),
     publishedVersionId: uuid("published_version_id"),
     createdAt: timestamp("created_at").notNull().defaultNow(),
-    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+    /**
+     * Explicit millisecond precision --- the autosave route's optimistic
+     * lock (`steps.md` M3.7) compares this column against a value the
+     * client round-tripped through `Date.toISOString()`, which only carries
+     * milliseconds. Postgres' default `timestamp` precision is
+     * microseconds; left at the default, the comparison would fail on
+     * *every* save, concurrent or not, since the sub-millisecond digits
+     * the client could never have known about would never match.
+     */
+    updatedAt: timestamp("updated_at", { precision: 3 }).notNull().defaultNow(),
   },
   (table) => [
     // "list my forms" runs on every dashboard request.

@@ -20,6 +20,8 @@ export function YesNoBlock({
   onSubmit,
   autoFocus,
   error,
+  onTitleChange,
+  onDescriptionChange,
 }: BlockProps<"yes_no">) {
   const selected = asBoolean(value);
   const activeIndex = selected === false ? 1 : 0;
@@ -37,6 +39,8 @@ export function YesNoBlock({
       description={block.description}
       required={block.required}
       error={error}
+      onTitleChange={onTitleChange}
+      onDescriptionChange={onDescriptionChange}
       hint={
         <>
           Press <Kbd>Y</Kbd> or <Kbd>N</Kbd>

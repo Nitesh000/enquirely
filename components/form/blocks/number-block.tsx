@@ -12,6 +12,8 @@ export function NumberBlock({
   onSubmit,
   autoFocus,
   error,
+  onTitleChange,
+  onDescriptionChange,
 }: BlockProps<"number">) {
   /**
    * Local text mirror of the numeric answer. Needed because "-", "" and "3."
@@ -33,6 +35,8 @@ export function NumberBlock({
       description={block.description}
       required={block.required}
       error={error}
+      onTitleChange={onTitleChange}
+      onDescriptionChange={onDescriptionChange}
       hint={
         <>
           {min !== undefined || max !== undefined ? (

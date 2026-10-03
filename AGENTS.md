@@ -19,8 +19,11 @@ explains why the build order differs from the plan's phases.
 Current state: **M0, M1 complete. M2 built and verified** except haptics,
 the Playwright suite and the mobile `visualViewport` pass. **M6 steps 1–4**
 (AI models, schemas, the LangGraph generation graph, its streaming route)
-landed early because they depend only on M1. Next is **M3, the builder** —
-it blocks the rest of M6.
+landed early because they depend only on M1. **M3, the builder, is core-done**
+and verified end-to-end in a real browser — create, edit, reorder, autosave,
+publish, answer at the public URL. Preview mode, the theme panel, and the
+share panel (QR) are the deliberately-deferred tail; see `next-steps.md` §1.
+Next: either that M3 tail, or M6 steps 5–6, which M3 was the only blocker for.
 
 ## Rules
 

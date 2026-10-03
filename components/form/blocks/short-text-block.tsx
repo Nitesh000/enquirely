@@ -10,6 +10,8 @@ export function ShortTextBlock({
   onSubmit,
   autoFocus,
   error,
+  onTitleChange,
+  onDescriptionChange,
 }: BlockProps<"short_text">) {
   return (
     <QuestionShell
@@ -18,6 +20,8 @@ export function ShortTextBlock({
       description={block.description}
       required={block.required}
       error={error}
+      onTitleChange={onTitleChange}
+      onDescriptionChange={onDescriptionChange}
       hint={
         <>
           Press <Kbd>Enter</Kbd> to continue

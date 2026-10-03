@@ -10,6 +10,8 @@ export function LongTextBlock({
   onSubmit,
   autoFocus,
   error,
+  onTitleChange,
+  onDescriptionChange,
 }: BlockProps<"long_text">) {
   return (
     <QuestionShell
@@ -18,6 +20,8 @@ export function LongTextBlock({
       description={block.description}
       required={block.required}
       error={error}
+      onTitleChange={onTitleChange}
+      onDescriptionChange={onDescriptionChange}
       hint={
         <>
           <Kbd>Enter</Kbd> to continue, <Kbd>Shift</Kbd>

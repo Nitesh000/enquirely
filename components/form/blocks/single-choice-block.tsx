@@ -20,6 +20,8 @@ export function SingleChoiceBlock({
   onSubmit,
   autoFocus,
   error,
+  onTitleChange,
+  onDescriptionChange,
 }: BlockProps<"single_choice">) {
   const options = block.singleChoice.options;
   const selected = asString(value);
@@ -51,6 +53,8 @@ export function SingleChoiceBlock({
       description={block.description}
       required={block.required}
       error={error}
+      onTitleChange={onTitleChange}
+      onDescriptionChange={onDescriptionChange}
       hint={
         <>
           Press <Kbd>A</Kbd>–<Kbd>{CHOICE_LETTERS[options.length - 1]}</Kbd> to

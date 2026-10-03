@@ -41,6 +41,49 @@ function makeDefinition(): FormDefinition {
 }
 
 describe("applyOperations", () => {
+  describe("update_form", () => {
+    it("updates the title", () => {
+      const def = makeDefinition();
+
+      const result = applyOperations(def, [
+        { type: "update_form", changes: { title: "Renamed" } },
+      ]);
+
+      expect(result.title).toBe("Renamed");
+    });
+
+    it("leaves description untouched when absent from changes", () => {
+      const def = { ...makeDefinition(), description: "Original" };
+
+      const result = applyOperations(def, [
+        { type: "update_form", changes: { title: "Renamed" } },
+      ]);
+
+      expect(result.description).toBe("Original");
+    });
+
+    it("clears description when explicitly set to undefined", () => {
+      const def = { ...makeDefinition(), description: "Original" };
+
+      const result = applyOperations(def, [
+        { type: "update_form", changes: { description: undefined } },
+      ]);
+
+      expect(result.description).toBeUndefined();
+    });
+
+    it("never touches blocks", () => {
+      const def = makeDefinition();
+      const snapshotBlocks = def.blocks.map((b) => b.id);
+
+      const result = applyOperations(def, [
+        { type: "update_form", changes: { title: "Renamed" } },
+      ]);
+
+      expect(result.blocks.map((b) => b.id)).toEqual(snapshotBlocks);
+    });
+  });
+
   it("does not mutate the original definition", () => {
     const def = makeDefinition();
     const snapshotBlocks = def.blocks.map((b) => b.id);

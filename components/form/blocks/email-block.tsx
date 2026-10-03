@@ -10,6 +10,8 @@ export function EmailBlock({
   onSubmit,
   autoFocus,
   error,
+  onTitleChange,
+  onDescriptionChange,
 }: BlockProps<"email">) {
   return (
     <QuestionShell
@@ -18,6 +20,8 @@ export function EmailBlock({
       description={block.description}
       required={block.required}
       error={error}
+      onTitleChange={onTitleChange}
+      onDescriptionChange={onDescriptionChange}
       hint={
         <>
           Press <Kbd>Enter</Kbd> to continue

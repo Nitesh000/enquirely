@@ -5,6 +5,7 @@ import { produce } from "immer";
  * operations to perform by the user
  */
 export type FormOperation =
+  | { type: "update_form"; changes: Partial<Pick<FormDefinition, "title" | "description">> }
   | { type: "add_block"; block: FormBlock; index: number }
   | { type: "update_block"; id: string; changes: Partial<FormBlock> }
   | { type: "delete_block"; id: string }
@@ -26,6 +27,14 @@ export function applyOperations(
   return produce(def, (draft) => {
     ops.forEach((op) => {
       switch (op.type) {
+        case "update_form": {
+          if (op.changes.title !== undefined) draft.title = op.changes.title;
+          if ("description" in op.changes) {
+            draft.description = op.changes.description;
+          }
+          break;
+        }
+
         case "add_block": {
           unknownTargetError(op.index);
           draft.blocks.splice(op.index, 0, op.block);

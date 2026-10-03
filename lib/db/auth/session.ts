@@ -49,3 +49,21 @@ export async function requireWorkspace(): Promise<{
 
   return { session, workspace };
 }
+
+/**
+ * Same lookup as `requireWorkspace`, but returns `null` instead of
+ * redirecting --- for API routes, where a `fetch()` caller expects a JSON
+ * 401, not a 307 to `/sign-in`.
+ */
+export async function getSessionWorkspace(): Promise<{
+  session: Session;
+  workspace: Workspace;
+} | null> {
+  const session = await getSession();
+  if (!session) return null;
+
+  const workspace = await getActiveWorkspace(session.user.id);
+  if (!workspace) return null;
+
+  return { session, workspace };
+}

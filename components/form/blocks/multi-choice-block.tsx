@@ -21,6 +21,8 @@ export function MultiChoiceBlock({
   onSubmit,
   autoFocus,
   error,
+  onTitleChange,
+  onDescriptionChange,
 }: BlockProps<"multi_choice">) {
   const options = block.multiChoice.options;
   const selected = asStringArray(value);
@@ -53,6 +55,8 @@ export function MultiChoiceBlock({
       description={block.description}
       required={block.required}
       error={error}
+      onTitleChange={onTitleChange}
+      onDescriptionChange={onDescriptionChange}
       hint={
         <>
           {minSelected !== undefined || maxSelected !== undefined ? (
