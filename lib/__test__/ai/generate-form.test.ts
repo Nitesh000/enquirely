@@ -4,7 +4,7 @@ import {
   createFormGenerationGraph,
   generateForm,
   type GenerateFormDeps,
-} from "@/lib/ai/graphs/generate-form";
+} from "@/lib/ai/graphs/generate-form/generate-form";
 
 /**
  * The graph takes its models as dependencies, so the whole thing is testable
@@ -98,7 +98,10 @@ function makeDeps(
 
 describe("form generation graph", () => {
   it("returns a valid definition on a clean first pass", async () => {
-    const result = await generateForm(makeDeps([validForm]), "Why do people cancel?");
+    const result = await generateForm(
+      makeDeps([validForm]),
+      "Why do people cancel?",
+    );
 
     expect(result.ok).toBe(true);
     if (!result.ok) return;

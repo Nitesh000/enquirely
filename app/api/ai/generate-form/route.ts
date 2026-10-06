@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import {
-  createFormGenerationGraph,
-  MAX_BLOCKS,
-} from "@/lib/ai/graphs/generate-form";
+import { createFormGenerationGraph } from "@/lib/ai/graphs/generate-form/generate-form";
 import {
   AiNotConfiguredError,
   AllKeysExhaustedError,
@@ -12,6 +9,7 @@ import {
 } from "@/lib/ai/models";
 import { aiEnabled } from "@/lib/config/env";
 import { getSession } from "@/lib/db/auth/session";
+import { MAX_BLOCKS } from "@/lib/ai/graphs/generate-form/schema";
 
 /**
  * Streaming form generation (`steps.md` M6.4).
