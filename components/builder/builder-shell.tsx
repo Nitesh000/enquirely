@@ -36,6 +36,7 @@ function TitleField() {
       onChange={(event) => field.onChange(event.target.value)}
       onBlur={field.flush}
       placeholder="Untitled form"
+      title={field.value || "Untitled form"}
       className="min-w-0 flex-1 truncate rounded-md bg-transparent px-1.5 py-1 font-heading text-sm font-medium outline-none hover:bg-muted focus-visible:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50"
     />
   );

@@ -116,13 +116,22 @@ const emptyDefinition: FormDefinition = formDefinitionSchema.parse({
 export async function createForm({
   workspaceId,
   title,
+  definition: provided,
 }: {
   workspaceId: string;
   title: string;
+  /**
+   * A starting definition --- AI generation (`steps.md` M6.5) hands one over
+   * rather than creating an empty form and then patching it, which would
+   * leave an "Untitled form" row behind if the second request failed.
+   */
+  definition?: FormDefinition;
 }): Promise<{ id: string; slug: string }> {
-  const trimmedTitle = title.trim() || "Untitled form";
+  // A generated form carries its own title, and the slug should reflect it
+  // rather than the caller's placeholder.
+  const trimmedTitle = (provided?.title ?? title).trim() || "Untitled form";
   const base = slugify(trimmedTitle);
-  const definition = { ...emptyDefinition, title: trimmedTitle };
+  const definition = { ...(provided ?? emptyDefinition), title: trimmedTitle };
 
   for (let attempt = 0; attempt < 5; attempt++) {
     const slug = attempt === 0 ? base : `${base}-${randomSuffix()}`;
@@ -334,7 +343,11 @@ export async function publishForm({
 
   const issues = validateDefinition(form.definition);
   if (issues.length > 0) {
-    return { ok: false, reason: "invalid", issues: issues.map((i) => i.message) };
+    return {
+      ok: false,
+      reason: "invalid",
+      issues: issues.map((i) => i.message),
+    };
   }
 
   return db.transaction(async (tx) => {

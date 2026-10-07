@@ -21,6 +21,6 @@ export const blocksSchema = z.object({
 
 export const wordingShema = z.object({
   blocks: z
-    .array(z.object({ id: z.string(), title: z.string().max(1) }))
+    .array(z.object({ id: z.string(), title: z.string().min(1) }))
     .max(MAX_BLOCKS),
 });

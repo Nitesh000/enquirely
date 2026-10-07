@@ -7,6 +7,7 @@ import { NewFormButton } from "@/components/dashboard/new-form-button";
 import { Button } from "@/components/ui/button";
 import { requireWorkspace } from "@/lib/db/auth/session";
 import { listFormsForWorkspace } from "@/lib/db/forms/forms";
+import { GenerateFormDialog } from "@/components/dashboard/generate-form-dialog";
 
 export const metadata: Metadata = { title: "Forms" };
 
@@ -20,7 +21,14 @@ export default async function FormsPage() {
       <PageHeader
         title="Forms"
         description="Everything you have built in this workspace."
-        action={forms.length > 0 ? <NewFormButton /> : undefined}
+        action={
+          forms.length > 0 ? (
+            <div className="flex gap-1">
+              <NewFormButton />
+              <GenerateFormDialog variant="brand" />
+            </div>
+          ) : undefined
+        }
       />
 
       {forms.length === 0 ? (
@@ -46,7 +54,8 @@ export default async function FormsPage() {
           </div>
 
           <p className="mt-6 font-mono text-xs text-muted-foreground">
-            AI generation lands with the rest of M6 &middot; see .agents/steps.md
+            AI generation lands with the rest of M6 &middot; see
+            .agents/steps.md
           </p>
         </div>
       ) : (

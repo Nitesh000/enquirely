@@ -9,9 +9,15 @@ import { z } from "zod";
 
 const baseBlockFields = {
   id: z.string(),
-  title: z.string().min(1),
-  description: z.string().optional(),
-  required: z.boolean().default(false),
+  title: z.string().min(1).describe("The question we wish to ask the user."),
+  description: z
+    .string()
+    .optional()
+    .describe("More detailed description for the question"),
+  required: z
+    .boolean()
+    .default(false)
+    .describe("Is answering this question required?"),
   validation: z.object({ message: z.string() }).optional(),
 };
 

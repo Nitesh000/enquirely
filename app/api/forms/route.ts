@@ -3,9 +3,11 @@ import { z } from "zod";
 
 import { createForm } from "@/lib/db/forms/forms";
 import { getSessionWorkspace } from "@/lib/db/auth/session";
+import { formDefinitionSchema } from "@/lib/forms/schema";
 
 const bodySchema = z.object({
   title: z.string().trim().min(1).max(200).default("Untitled form"),
+  definition: formDefinitionSchema.optional(),
 });
 
 /** Creates an empty draft and hands back its id --- the forms list redirects straight into `/forms/[id]/edit`. */
@@ -33,6 +35,7 @@ export async function POST(request: Request) {
   const form = await createForm({
     workspaceId: auth.workspace.id,
     title: parsed.data.title,
+    definition: parsed.data.definition,
   });
 
   return NextResponse.json(form, { status: 201 });

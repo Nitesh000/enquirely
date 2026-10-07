@@ -43,12 +43,18 @@ export function QuestionShell({
       <div className="flex flex-col gap-2.5">
         {onTitleChange ? (
           <div className="flex items-start gap-1.5">
-            <input
+            <textarea
               id={`${blockId}-label`}
+              rows={1}
               value={title}
-              onChange={(event) => onTitleChange(event.target.value)}
+              onChange={(event) =>
+                onTitleChange(event.target.value.replace(/\n/g, " "))
+              }
+              onKeyDown={(event) => {
+                if (event.key === "Enter") event.preventDefault();
+              }}
               placeholder="Question title"
-              className="w-full border-b border-transparent bg-transparent font-heading text-2xl font-semibold tracking-tight text-balance outline-none transition-colors placeholder:text-muted-foreground/50 hover:border-border focus-visible:border-brand sm:text-[1.75rem] sm:leading-[1.2]"
+              className="w-full resize-none overflow-hidden border-b border-transparent bg-transparent font-heading text-2xl font-semibold tracking-tight text-balance outline-none transition-colors field-sizing-content placeholder:text-muted-foreground/50 hover:border-border focus-visible:border-brand sm:text-[1.75rem] sm:leading-[1.2]"
             />
             {required ? (
               <span aria-hidden className="pt-1 text-base text-brand">
@@ -81,7 +87,7 @@ export function QuestionShell({
             value={description ?? ""}
             onChange={(event) => onDescriptionChange(event.target.value)}
             placeholder="Description (optional)"
-            className="w-full resize-none border-b border-transparent bg-transparent text-[0.9375rem] text-pretty text-muted-foreground outline-none transition-colors placeholder:text-muted-foreground/50 hover:border-border focus-visible:border-brand"
+            className="w-full resize-none border-b border-transparent bg-transparent text-[0.9375rem] text-pretty text-muted-foreground outline-none transition-colors field-sizing-content max-h-40 placeholder:text-muted-foreground/50 hover:border-border focus-visible:border-brand"
           />
         ) : description ? (
           <p
