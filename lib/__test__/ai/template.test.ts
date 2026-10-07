@@ -5,7 +5,7 @@ import {
   runTemplate,
   streamTemplate,
   type TemplateDeps,
-} from "@/lib/ai/graphs/TEMPLATE";
+} from "@/lib/ai/graphs/generate-form/TEMPLATE";
 
 /**
  * The template is documentation, so it is tested like code --- a reference
