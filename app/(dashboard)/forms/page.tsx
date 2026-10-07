@@ -46,10 +46,7 @@ export default async function FormsPage() {
           </p>
 
           <div className="flex flex-col gap-2 mt-6 sm:flex-row">
-            <Button variant="brand" disabled>
-              <SparklesIcon />
-              Generate with AI
-            </Button>
+            <GenerateFormDialog variant="brand" buttonStyle="long" />
             <NewFormButton variant="outline" />
           </div>
 

@@ -24,6 +24,7 @@ import { Textarea } from "../ui/textarea";
 
 type PropType = {
   variant: "brand" | "outline";
+  buttonStyle?: "long" | "short";
 };
 
 const streamEventSchema = z.discriminatedUnion("type", [
@@ -46,7 +47,10 @@ type Step = { node: string; label: string; attempt: number };
 
 const MIN_BRIEF = 10;
 
-export function GenerateFormDialog({ variant }: PropType) {
+export function GenerateFormDialog({
+  variant,
+  buttonStyle = "short",
+}: PropType) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState<string>("");
   const [steps, setSteps] = useState<Step[]>([]);
@@ -163,7 +167,7 @@ export function GenerateFormDialog({ variant }: PropType) {
     >
       <DialogTrigger asChild>
         <Button variant={variant}>
-          <SparklesIcon />
+          <SparklesIcon /> {buttonStyle == "long" ? "Generate with AI" : ""}
         </Button>
       </DialogTrigger>
 
