@@ -17,6 +17,7 @@ import {
 
 import { createDefaultBlock } from "@/lib/builder/default-block";
 import type { BlockType } from "@/lib/forms/schema";
+import { confirm } from "@/lib/ui/confirm-store";
 
 import { AddBlockMenu } from "./add-block-menu";
 import { useBuilderStore } from "./builder-context";
@@ -44,11 +45,18 @@ export function BlockListPanel() {
     select(block.id);
   }
 
-  function handleDelete(id: string) {
+  async function handleDelete(id: string) {
     const block = blocks.find((b) => b.id === id);
     if (!block) return;
 
-    if (!window.confirm(`Delete "${block.title || "this question"}"?`)) return;
+    const confirmed = await confirm({
+      title: `Delete "${block.title || "this question"}"?`,
+      description:
+        "Undo will bring it back. A published form keeps this question until you publish again.",
+      confirmLabel: "Delete question",
+      destructive: true,
+    });
+    if (!confirmed) return;
 
     // `dispatch` itself keeps `selectedBlockId` valid if this was the
     // selected block --- see `withValidSelection` in `lib/builder/store.ts`.

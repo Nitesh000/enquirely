@@ -1,6 +1,7 @@
 import { Logo } from "@/components/brand/logo";
 import { SidebarNav } from "@/components/dashboard/sidebar-nav";
 import { UserMenu } from "@/components/dashboard/user-menu";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { requireWorkspace } from "@/lib/db/auth/session";
 
 /**
@@ -43,6 +44,8 @@ export default async function DashboardLayout({ children }: LayoutProps<"/">) {
 
         <main className="flex-1 pb-12 min-w-0">{children}</main>
       </div>
+
+      <ConfirmDialog />
     </div>
   );
 }

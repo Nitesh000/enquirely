@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { AddBlockMenu } from "./add-block-menu";
 import { cloneBlockWithNewId, createDefaultBlock } from "@/lib/builder/default-block";
 import type { BlockType, FormBlock } from "@/lib/forms/schema";
+import { confirm } from "@/lib/ui/confirm-store";
 
 import { useBuilderStore } from "./builder-context";
 import { useDebouncedField } from "./use-debounced-field";
@@ -96,9 +97,17 @@ export function BuilderCanvas() {
     select(copy.id);
   }
 
-  function handleDelete() {
+  async function handleDelete() {
     if (!block) return;
-    if (!window.confirm(`Delete "${block.title || "this question"}"?`)) return;
+
+    const confirmed = await confirm({
+      title: `Delete "${block.title || "this question"}"?`,
+      description:
+        "Undo will bring it back. A published form keeps this question until you publish again.",
+      confirmLabel: "Delete question",
+      destructive: true,
+    });
+    if (!confirmed) return;
 
     // `dispatch` keeps `selectedBlockId` valid on its own; see
     // `withValidSelection` in `lib/builder/store.ts`.

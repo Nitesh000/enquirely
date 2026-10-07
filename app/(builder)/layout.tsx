@@ -1,3 +1,4 @@
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { requireWorkspace } from "@/lib/db/auth/session";
 
 /**
@@ -10,5 +11,10 @@ import { requireWorkspace } from "@/lib/db/auth/session";
 export default async function BuilderLayout({ children }: LayoutProps<"/">) {
   await requireWorkspace();
 
-  return <div className="h-dvh">{children}</div>;
+  return (
+    <div className="h-dvh">
+      {children}
+      <ConfirmDialog />
+    </div>
+  );
 }

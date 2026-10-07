@@ -24,6 +24,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { FormListItem } from "@/lib/db/forms/forms";
+import { confirm } from "@/lib/ui/confirm-store";
 import { formatRelativeTime } from "@/lib/utils/time";
 
 export function FormsGrid({ initialForms }: { initialForms: FormListItem[] }) {
@@ -63,7 +64,13 @@ export function FormsGrid({ initialForms }: { initialForms: FormListItem[] }) {
   }
 
   async function handleDelete(form: FormListItem) {
-    if (!window.confirm(`Delete "${form.title}"? This can't be undone.`)) return;
+    const confirmed = await confirm({
+      title: `Delete "${form.title}"?`,
+      description: "This can't be undone. Responses collected so far go with it.",
+      confirmLabel: "Delete form",
+      destructive: true,
+    });
+    if (!confirmed) return;
 
     const response = await fetch(`/api/forms/${form.id}`, { method: "DELETE" });
     if (!response.ok) {
