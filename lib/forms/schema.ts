@@ -205,3 +205,20 @@ export const formDefinitionSchema = z.object({
 });
 
 export type FormDefinition = z.infer<typeof formDefinitionSchema>;
+
+export const formSettingsSchema = z.object({
+  acceptingResponses: z.boolean().default(true),
+});
+
+export type FormSettings = z.infer<typeof formSettingsSchema>;
+
+/**
+ * `forms.settings` is nullable and predates this schema, so every read goes
+ * through here. Unparseable settings fall back to *accepting* on purpose: a
+ * form that quietly stops collecting responses loses data with no signal,
+ * while one that keeps collecting is recoverable.
+ */
+export function parseFormSettings(raw: unknown): FormSettings {
+  const parsed = formSettingsSchema.safeParse(raw ?? {});
+  return parsed.success ? parsed.data : { acceptingResponses: true };
+}

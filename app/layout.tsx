@@ -53,11 +53,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex flex-col min-h-full">
         <ThemeProvider>
-          <div className="flex justify-center p-2 py-1 bg-[#8889F3]/50">
-            <p className="font-mono font-medium tracking-wider text-center">
-              This project is currently under development.
-            </p>
-          </div>
+          {/* <div className="flex justify-center p-2 py-1 bg-[#8889F3]/50"> */}
+          {/*   <p className="font-mono font-medium tracking-wider text-center"> */}
+          {/*     This project is currently under development. */}
+          {/*   </p> */}
+          {/* </div> */}
           {children}
           <Toaster position="top-center" richColors />
         </ThemeProvider>

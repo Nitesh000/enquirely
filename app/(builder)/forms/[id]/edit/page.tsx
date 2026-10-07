@@ -28,6 +28,7 @@ export default async function EditFormPage({
       definition={form.definition}
       updatedAt={form.updatedAt.toISOString()}
       published={form.publishedVersionId !== null}
+      acceptingResponses={form.acceptingResponses}
     />
   );
 }

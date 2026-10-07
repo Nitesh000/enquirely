@@ -1,10 +1,21 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { deleteForm, renameForm } from "@/lib/db/forms/forms";
+import {
+  deleteForm,
+  renameForm,
+  setAcceptingResponses,
+} from "@/lib/db/forms/forms";
 import { getSessionWorkspace } from "@/lib/db/auth/session";
 
-const bodySchema = z.object({ title: z.string().trim().min(1).max(200) });
+const bodySchema = z
+  .object({
+    title: z.string().trim().min(1).max(200).optional(),
+    acceptingResponses: z.boolean().optional(),
+  })
+  .refine((body) => Object.values(body).some((v) => v !== undefined), {
+    message: "Nothing to update",
+  });
 
 export async function PATCH(
   request: Request,
@@ -32,11 +43,23 @@ export async function PATCH(
     );
   }
 
-  const ok = await renameForm({
-    formId: id,
-    workspaceId: auth.workspace.id,
-    title: parsed.data.title,
-  });
+  let ok = true;
+
+  if (parsed.data.title !== undefined) {
+    ok = await renameForm({
+      formId: id,
+      workspaceId: auth.workspace.id,
+      title: parsed.data.title,
+    });
+  }
+
+  if (ok && parsed.data.acceptingResponses !== undefined) {
+    ok = await setAcceptingResponses({
+      formId: id,
+      workspaceId: auth.workspace.id,
+      acceptingResponses: parsed.data.acceptingResponses,
+    });
+  }
 
   if (!ok) {
     return NextResponse.json({ error: "Form not found" }, { status: 404 });

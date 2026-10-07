@@ -39,6 +39,16 @@ export async function POST(
     return NextResponse.json({ error: "Form not found" }, { status: 404 });
   }
 
+  // The page renders a closed screen, but anyone holding an already-open tab
+  // --- or anything that is not a browser --- can still POST. 410, not 404:
+  // the form existed and the caller's link was correct.
+  if (!form.acceptingResponses) {
+    return NextResponse.json(
+      { error: "This form is no longer accepting responses" },
+      { status: 410 },
+    );
+  }
+
   let rawBody: unknown;
   try {
     rawBody = await request.json();

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { ClosedScreen } from "@/components/form/closed-screen";
 import { FormRenderer } from "@/components/form/form-renderer";
 import { getPublishedFormBySlug } from "@/lib/db/forms/forms";
 
@@ -37,6 +38,8 @@ export default async function PublicFormPage({
   const form = await getPublishedFormBySlug(slug);
 
   if (!form) notFound();
+
+  if (!form.acceptingResponses) return <ClosedScreen title={form.title} />;
 
   return (
     <FormRenderer

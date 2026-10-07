@@ -3,6 +3,8 @@
 import {
   ArrowLeftIcon,
   ExternalLinkIcon,
+  LockIcon,
+  LockOpenIcon,
   Redo2Icon,
   RocketIcon,
   Undo2Icon,
@@ -13,6 +15,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import type { FormDefinition } from "@/lib/forms/schema";
+import { confirm } from "@/lib/ui/confirm-store";
 
 import { BlockListPanel } from "./block-list-panel";
 import { BuilderCanvas } from "./builder-canvas";
@@ -145,6 +148,7 @@ function PublishButton({
           </a>
         </Button>
       ) : null}
+
       <Button variant="brand" size="sm" disabled={publishing} onClick={handlePublish}>
         <RocketIcon />
         {publishing ? "Publishing…" : published ? "Publish changes" : "Publish"}
@@ -153,19 +157,86 @@ function PublishButton({
   );
 }
 
+function AcceptingResponsesToggle({
+  formId,
+  acceptingResponses,
+  onChange,
+}: {
+  formId: string;
+  acceptingResponses: boolean;
+  onChange: (next: boolean) => void;
+}) {
+  const [pending, setPending] = useState(false);
+
+  async function handleToggle() {
+    const next = !acceptingResponses;
+
+    if (!next) {
+      const confirmed = await confirm({
+        title: "Stop accepting responses?",
+        description:
+          "The link keeps working, but anyone opening it sees that the form is closed. You can reopen it at any time.",
+        confirmLabel: "Close form",
+      });
+      if (!confirmed) return;
+    }
+
+    setPending(true);
+    try {
+      const response = await fetch(`/api/forms/${formId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ acceptingResponses: next }),
+      });
+
+      if (!response.ok) {
+        toast.error("Couldn't update the form. Try again.");
+        return;
+      }
+
+      onChange(next);
+      toast.success(next ? "Accepting responses" : "Form closed");
+    } catch {
+      toast.error("Couldn't reach the server. Try again.");
+    } finally {
+      setPending(false);
+    }
+  }
+
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      disabled={pending}
+      onClick={handleToggle}
+      title={
+        acceptingResponses
+          ? "Stop accepting new responses"
+          : "Reopen this form to new responses"
+      }
+    >
+      {acceptingResponses ? <LockOpenIcon /> : <LockIcon />}
+      {acceptingResponses ? "Open" : "Closed"}
+    </Button>
+  );
+}
+
 function BuilderLayout({
   formId,
   slug,
   initialUpdatedAt,
   initialPublished,
+  initialAcceptingResponses,
 }: {
   formId: string;
   slug: string;
   initialUpdatedAt: string;
   initialPublished: boolean;
+  initialAcceptingResponses: boolean;
 }) {
   const { status, flush } = useAutosave(formId, initialUpdatedAt);
   const [published, setPublished] = useState(initialPublished);
+  const [accepting, setAccepting] = useState(initialAcceptingResponses);
 
   return (
     <div className="flex h-dvh flex-col">
@@ -186,6 +257,13 @@ function BuilderLayout({
           <div className="h-5 w-px bg-border" />
           <UndoRedoButtons />
           <div className="h-5 w-px bg-border" />
+          {published ? (
+            <AcceptingResponsesToggle
+              formId={formId}
+              acceptingResponses={accepting}
+              onChange={setAccepting}
+            />
+          ) : null}
           <PublishButton
             formId={formId}
             slug={slug}
@@ -217,6 +295,7 @@ export function BuilderShell(props: {
   definition: FormDefinition;
   updatedAt: string;
   published: boolean;
+  acceptingResponses: boolean;
 }) {
   return (
     <BuilderStoreProvider definition={props.definition}>
@@ -225,6 +304,7 @@ export function BuilderShell(props: {
         slug={props.slug}
         initialUpdatedAt={props.updatedAt}
         initialPublished={props.published}
+        initialAcceptingResponses={props.acceptingResponses}
       />
     </BuilderStoreProvider>
   );

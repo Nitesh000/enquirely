@@ -5,7 +5,11 @@ import { and, desc, eq, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { formVersions, forms, responses } from "@/lib/db/schema";
 import { randomSuffix, slugify } from "@/lib/utils/slug";
-import { formDefinitionSchema, type FormDefinition } from "@/lib/forms/schema";
+import {
+  formDefinitionSchema,
+  parseFormSettings,
+  type FormDefinition,
+} from "@/lib/forms/schema";
 import { validateDefinition } from "@/lib/forms/validate-definition";
 
 export type PublishedForm = {
@@ -14,6 +18,7 @@ export type PublishedForm = {
   versionNumber: number;
   title: string;
   definition: FormDefinition;
+  acceptingResponses: boolean;
 };
 
 /**
@@ -35,6 +40,7 @@ export async function getPublishedFormBySlug(
       versionId: formVersions.id,
       versionNumber: formVersions.versionNumber,
       definition: formVersions.definition,
+      settings: forms.settings,
     })
     .from(forms)
     .innerJoin(
@@ -55,6 +61,7 @@ export async function getPublishedFormBySlug(
     versionNumber: row.versionNumber,
     title: row.title,
     definition: row.definition,
+    acceptingResponses: parseFormSettings(row.settings).acceptingResponses,
   };
 }
 
@@ -154,6 +161,7 @@ export type EditableForm = {
   slug: string;
   definition: FormDefinition;
   publishedVersionId: string | null;
+  acceptingResponses: boolean;
   updatedAt: Date;
 };
 
@@ -178,13 +186,21 @@ export async function getFormForEdit({
       slug: forms.slug,
       definition: forms.definition,
       publishedVersionId: forms.publishedVersionId,
+      settings: forms.settings,
       updatedAt: forms.updatedAt,
     })
     .from(forms)
     .where(and(eq(forms.id, formId), eq(forms.workspaceId, workspaceId)))
     .limit(1);
 
-  return row ?? null;
+  if (!row) return null;
+
+  const { settings, ...form } = row;
+
+  return {
+    ...form,
+    acceptingResponses: parseFormSettings(settings).acceptingResponses,
+  };
 }
 
 export type SaveDefinitionResult =
@@ -372,4 +388,39 @@ export async function publishForm({
 
     return { ok: true, versionId: version.id, versionNumber };
   });
+}
+
+/**
+ * Opens or closes a form to new responses.
+ *
+ * Deliberately separate from publishing: the form stays published and its
+ * URL keeps resolving, so a respondent who already has the link is told the
+ * form is closed rather than getting a 404 they cannot tell apart from a
+ * mistyped URL. Lives on `forms`, not on the version --- closing is not a
+ * content change and must not create a new version.
+ */
+export async function setAcceptingResponses({
+  formId,
+  workspaceId,
+  acceptingResponses,
+}: {
+  formId: string;
+  workspaceId: string;
+  acceptingResponses: boolean;
+}): Promise<boolean> {
+  const [row] = await db
+    .select({ settings: forms.settings })
+    .from(forms)
+    .where(and(eq(forms.id, formId), eq(forms.workspaceId, workspaceId)))
+    .limit(1);
+
+  if (!row) return false;
+
+  const [updated] = await db
+    .update(forms)
+    .set({ settings: { ...parseFormSettings(row.settings), acceptingResponses } })
+    .where(and(eq(forms.id, formId), eq(forms.workspaceId, workspaceId)))
+    .returning({ id: forms.id });
+
+  return Boolean(updated);
 }
