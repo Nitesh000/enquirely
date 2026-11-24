@@ -130,11 +130,13 @@ export async function POST(request: Request) {
             issues: [error.message],
           });
         } else {
+          // Provider errors carry their own internals --- organisation ids,
+          // upgrade URLs, raw JSON. Log them, do not stream them.
+          console.error("[generate-form] graph failed", error);
+
           send({
             type: "error",
-            issues: [
-              error instanceof Error ? error.message : "Generation failed",
-            ],
+            issues: ["Generation failed. Try again."],
           });
         }
       } finally {

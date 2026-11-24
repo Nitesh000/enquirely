@@ -14,7 +14,17 @@ import { createHash } from "node:crypto";
 export type ExhaustionReason = "daily_limit" | "invalid_key";
 
 export type FailureVerdict =
-  | { exhausted: false; retryable: boolean }
+  | {
+      exhausted: false;
+      retryable: boolean;
+      /**
+       * Set for a per-minute 429. The key is not spent, but it is unusable
+       * for roughly this long --- the caller uses it to skip past the key
+       * for the current request and to report an honest retry hint if every
+       * key is throttled at once.
+       */
+      resetSeconds?: number;
+    }
   | { exhausted: true; reason: ExhaustionReason; resetSeconds: number };
 
 /**
@@ -117,8 +127,18 @@ export function classifyFailure({
   const isDaily = /per\s*day|\bTPD\b|\bRPD\b|daily/i.test(text);
 
   if (!isDaily) {
-    // Per-minute ceiling: the same key works again shortly.
-    return { exhausted: false, retryable: true };
+    // Per-minute ceiling: the same key works again shortly, so it must not
+    // be parked --- but it is useless *right now*, and every other key has
+    // its own independent per-minute budget.
+    return {
+      exhausted: false,
+      retryable: true,
+      resetSeconds:
+        parseDuration(header("retry-after")) ??
+        parseDuration(header("x-ratelimit-reset-tokens")) ??
+        parseDuration(header("x-ratelimit-reset-requests")) ??
+        undefined,
+    };
   }
 
   const resetSeconds =

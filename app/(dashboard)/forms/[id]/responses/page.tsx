@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { requireWorkspace } from "@/lib/db/auth/session";
+import { ResponseChat } from "@/components/dashboard/response-chat";
 import { getFormForEdit } from "@/lib/db/forms/forms";
 import {
   listResponsesTable,
@@ -174,6 +175,10 @@ export default async function ResponsesPage({
         </div>
       ) : (
         <>
+          <div className="mb-6">
+            <ResponseChat formId={id} />
+          </div>
+
           <div className="mb-4 flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-1 rounded-lg bg-muted p-0.5">
               {STATUS_FILTERS.map((filter) => (

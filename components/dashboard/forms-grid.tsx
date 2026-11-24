@@ -46,7 +46,9 @@ export function FormsGrid({ initialForms }: { initialForms: FormListItem[] }) {
       return;
     }
 
-    setForms((prev) => prev.map((f) => (f.id === form.id ? { ...f, title } : f)));
+    setForms((prev) =>
+      prev.map((f) => (f.id === form.id ? { ...f, title } : f)),
+    );
   }
 
   async function handleDuplicate(form: FormListItem) {
@@ -66,7 +68,8 @@ export function FormsGrid({ initialForms }: { initialForms: FormListItem[] }) {
   async function handleDelete(form: FormListItem) {
     const confirmed = await confirm({
       title: `Delete "${form.title}"?`,
-      description: "This can't be undone. Responses collected so far go with it.",
+      description:
+        "This can't be undone. Responses collected so far go with it.",
       confirmLabel: "Delete form",
       destructive: true,
     });
@@ -86,14 +89,17 @@ export function FormsGrid({ initialForms }: { initialForms: FormListItem[] }) {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {forms.map((form) => (
-        <Card key={form.id} className="group relative ring-1 ring-foreground/10">
+        <Card
+          key={form.id}
+          className="group ring-foreground/10 relative ring-1"
+        >
           {/* Stretched link makes the whole card clickable; the menu button
               sits above it (relative z-10) so its own click isn't swallowed
               by the overlay --- the standard "card with an overlay action"
               pattern, since a <button> can't nest inside the <a> itself. */}
           <Link
             href={`/forms/${form.id}/edit`}
-            className="absolute inset-0 z-0 rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="focus-visible:ring-ring/50 absolute inset-0 z-0 rounded-xl outline-none focus-visible:ring-3"
             aria-label={`Edit ${form.title}`}
           />
 
@@ -102,8 +108,9 @@ export function FormsGrid({ initialForms }: { initialForms: FormListItem[] }) {
               <h3 className="truncate font-heading text-sm font-semibold">
                 {form.title}
               </h3>
-              <p className="mt-0.5 text-xs text-muted-foreground">
-                {form.blockCount} {form.blockCount === 1 ? "question" : "questions"}
+              <p className="text-muted-foreground mt-0.5 text-xs">
+                {form.blockCount}{" "}
+                {form.blockCount === 1 ? "question" : "questions"}
                 {" · "}
                 {formatRelativeTime(form.updatedAt)}
               </p>
@@ -130,7 +137,10 @@ export function FormsGrid({ initialForms }: { initialForms: FormListItem[] }) {
                   Duplicate
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href={`/forms/${form.id}/responses`} className="relative z-10">
+                  <Link
+                    href={`/forms/${form.id}/responses`}
+                    className="relative z-10"
+                  >
                     <BarChart3Icon />
                     View responses
                     {form.responseCount > 0 ? (
@@ -142,7 +152,11 @@ export function FormsGrid({ initialForms }: { initialForms: FormListItem[] }) {
                 </DropdownMenuItem>
                 {form.published ? (
                   <DropdownMenuItem asChild>
-                    <a href={`/f/${form.slug}`} target="_blank" rel="noreferrer">
+                    <a
+                      href={`/f/${form.slug}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       <ExternalLinkIcon />
                       View live
                     </a>
@@ -164,10 +178,13 @@ export function FormsGrid({ initialForms }: { initialForms: FormListItem[] }) {
             <Badge variant={form.published ? "secondary" : "outline"}>
               {form.published ? "Published" : "Draft"}
             </Badge>
+            <Badge variant={form.acceptingResponses ? "secondary" : "outline"}>
+              {form.acceptingResponses ? "Open" : "Closed"}
+            </Badge>
             {form.responseCount > 0 ? (
               <Link
                 href={`/forms/${form.id}/responses`}
-                className="relative z-10 text-xs text-muted-foreground underline-offset-2 outline-none hover:text-foreground hover:underline focus-visible:underline"
+                className="text-muted-foreground hover:text-foreground relative z-10 text-xs underline-offset-2 outline-none hover:underline focus-visible:underline"
               >
                 {form.responseCount}{" "}
                 {form.responseCount === 1 ? "response" : "responses"}

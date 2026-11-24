@@ -49,6 +49,11 @@ export function createRotatingFetch({
     const fingerprints = keys.map(fingerprintKey);
     const exhausted = new Set(await store.getExhausted(fingerprints));
 
+    // Keys throttled by a *per-minute* ceiling during this request. Kept in
+    // memory and never written to the store: the key is fine again within
+    // seconds, so persisting it would drain the pool.
+    let soonestThrottleReset: number | undefined;
+
     // At most one attempt per key. Every pass either succeeds, fails for a
     // reason rotation cannot fix, or parks a key and moves to the next.
     for (let attempt = 0; attempt < keys.length; attempt++) {
@@ -70,9 +75,28 @@ export function createRotatingFetch({
         headers: response.headers,
       });
 
-      // Per-minute throttling, a 400, a 500 --- nothing rotation can fix.
-      // Hand it back and let the SDK deal with it.
-      if (!verdict.exhausted) return response;
+      if (!verdict.exhausted) {
+        // A per-minute 429 is the one non-exhausting failure rotation *can*
+        // fix. Handing it back means the SDK retries the same key while its
+        // window is still open, so a single throttled key fails the request
+        // even with others idle. Skip it for this request only --- nothing
+        // is persisted, so the next request sees it as available.
+        if (response.status === 429) {
+          exhausted.add(selected.fingerprint);
+
+          if (verdict.resetSeconds !== undefined) {
+            soonestThrottleReset = Math.min(
+              soonestThrottleReset ?? verdict.resetSeconds,
+              verdict.resetSeconds,
+            );
+          }
+
+          continue;
+        }
+
+        // A 400, a 500 --- nothing rotation can fix. Hand it back.
+        return response;
+      }
 
       await store.markExhausted(
         selected.fingerprint,
@@ -89,8 +113,15 @@ export function createRotatingFetch({
       });
     }
 
+    // Prefer the throttle window actually reported over the store's
+    // day-scale default: "try again in 8s" is actionable, "try again in an
+    // hour" when every key is merely throttled is not.
+    const storeReset = await store.soonestResetSeconds(fingerprints);
+
     throw new AllKeysExhaustedError(
-      await store.soonestResetSeconds(fingerprints),
+      soonestThrottleReset !== undefined
+        ? Math.min(soonestThrottleReset, storeReset)
+        : storeReset,
     );
   } as typeof fetch;
 }

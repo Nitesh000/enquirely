@@ -73,6 +73,7 @@ export type FormListItem = {
   published: boolean;
   updatedAt: Date;
   responseCount: number;
+  acceptingResponses?: boolean;
 };
 
 /** Every form in a workspace, most recently updated first --- AGENTS.md: every form query is workspace-scoped. */
@@ -90,6 +91,7 @@ export async function listFormsForWorkspace(
       // LEFT JOIN + count: a form with zero responses must still appear,
       // not get dropped by an inner join.
       responseCount: sql<number>`count(${responses.id})::int`,
+      settings: forms.settings,
     })
     .from(forms)
     .leftJoin(responses, eq(responses.formId, forms.id))
@@ -105,6 +107,7 @@ export async function listFormsForWorkspace(
     published: row.publishedVersionId !== null,
     updatedAt: row.updatedAt,
     responseCount: row.responseCount,
+    acceptingResponses: parseFormSettings(row.settings).acceptingResponses,
   }));
 }
 
@@ -418,7 +421,9 @@ export async function setAcceptingResponses({
 
   const [updated] = await db
     .update(forms)
-    .set({ settings: { ...parseFormSettings(row.settings), acceptingResponses } })
+    .set({
+      settings: { ...parseFormSettings(row.settings), acceptingResponses },
+    })
     .where(and(eq(forms.id, formId), eq(forms.workspaceId, workspaceId)))
     .returning({ id: forms.id });
 

@@ -87,19 +87,64 @@ describe("rotating fetch", () => {
     expect(second.used).toEqual(["gsk_two"]);
   });
 
-  it("does NOT park a key for a per-minute limit", async () => {
+  it("rotates past a per-minute limit without parking the key", async () => {
     const store = createMemoryStore();
-    const { fetchImpl, used } = recordingFetch([minuteLimit]);
+    const { fetchImpl, used } = recordingFetch([
+      minuteLimit,
+      () => new Response("ok"),
+    ]);
     const doFetch = createRotatingFetch({ keys: KEYS, store, fetchImpl });
 
     const response = await doFetch("https://api.groq.com/v1/chat");
 
-    // Returned as-is for the SDK to handle; crucially only one key was
-    // touched. Parking here would drain the whole pool in a minute.
-    expect(response.status).toBe(429);
-    expect(used).toEqual(["gsk_one"]);
+    // Every key has its own per-minute budget, so a throttled one must not
+    // fail the request while others sit idle.
+    expect(response.status).toBe(200);
+    expect(used).toEqual(["gsk_one", "gsk_two"]);
+
+    // ...but it must not be *parked*: it works again in seconds, and
+    // persisting it would drain the whole pool within a minute.
     expect(await store.getExhausted(KEYS.map(fingerprintKey))).toEqual(
       new Set(),
+    );
+  });
+
+  it("reports the real throttle window when every key is rate limited", async () => {
+    const store = createMemoryStore();
+    const { fetchImpl, used } = recordingFetch([minuteLimit]);
+    const doFetch = createRotatingFetch({ keys: KEYS, store, fetchImpl });
+
+    await expect(doFetch("https://api.groq.com/v1/chat")).rejects.toMatchObject(
+      {
+        // The header said 8 seconds. Reporting the store's day-scale default
+        // instead would tell the user to come back in an hour.
+        retryAfterSeconds: 8,
+      },
+    );
+
+    expect(used).toEqual(["gsk_one", "gsk_two", "gsk_three"]);
+    expect(await store.getExhausted(KEYS.map(fingerprintKey))).toEqual(
+      new Set(),
+    );
+  });
+
+  it("still parks a daily limit while only throttling on a per-minute one", async () => {
+    const store = createMemoryStore();
+    const { fetchImpl, used } = recordingFetch([
+      dailyLimit,
+      minuteLimit,
+      () => new Response("ok"),
+    ]);
+    const doFetch = createRotatingFetch({ keys: KEYS, store, fetchImpl });
+
+    const response = await doFetch("https://api.groq.com/v1/chat");
+
+    expect(response.status).toBe(200);
+    expect(used).toEqual(["gsk_one", "gsk_two", "gsk_three"]);
+
+    // Only the daily one persists.
+    expect(await store.getExhausted(KEYS.map(fingerprintKey))).toEqual(
+      new Set([fingerprintKey("gsk_one")]),
     );
   });
 
@@ -165,7 +210,12 @@ describe("rotating fetch", () => {
   });
 
   it("leaves the response body readable after classifying it", async () => {
-    const { fetchImpl } = recordingFetch([minuteLimit]);
+    // Any handed-back failure exercises the same path; a 400 is used rather
+    // than a per-minute 429 because the latter now rotates instead of
+    // returning.
+    const { fetchImpl } = recordingFetch([
+      () => new Response("model `nope` does not exist", { status: 400 }),
+    ]);
     const doFetch = createRotatingFetch({
       keys: KEYS,
       store: createMemoryStore(),
@@ -174,7 +224,7 @@ describe("rotating fetch", () => {
 
     const response = await doFetch("https://x");
     // The SDK still has to read this; classification clones rather than consumes.
-    await expect(response.text()).resolves.toContain("per minute");
+    await expect(response.text()).resolves.toContain("does not exist");
   });
 
   it("throws rather than hanging when no keys are configured", async () => {

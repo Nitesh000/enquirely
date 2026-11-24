@@ -16,6 +16,8 @@ export default async function FormsPage() {
   const { workspace } = await requireWorkspace();
   const forms = await listFormsForWorkspace(workspace.id);
 
+  console.log(">> forms", forms);
+
   return (
     <>
       <PageHeader
@@ -32,25 +34,25 @@ export default async function FormsPage() {
       />
 
       {forms.length === 0 ? (
-        <div className="flex flex-col justify-center items-center py-20 px-6 text-center rounded-2xl border border-dashed">
-          <span className="inline-grid place-items-center rounded-2xl size-12 bg-brand/10 text-brand">
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed px-6 py-20 text-center">
+          <span className="bg-brand/10 text-brand inline-grid size-12 place-items-center rounded-2xl">
             <SparklesIcon className="size-6" />
           </span>
 
           <h2 className="mt-5 text-lg font-semibold tracking-tight">
             No forms yet
           </h2>
-          <p className="mt-2 max-w-sm text-sm text-pretty text-muted-foreground">
+          <p className="text-muted-foreground mt-2 max-w-sm text-sm text-pretty">
             Describe the survey you need and Enquirely will draft the questions,
             pick the right inputs and wire up the branching.
           </p>
 
-          <div className="flex flex-col gap-2 mt-6 sm:flex-row">
+          <div className="mt-6 flex flex-col gap-2 sm:flex-row">
             <GenerateFormDialog variant="brand" buttonStyle="long" />
             <NewFormButton variant="outline" />
           </div>
 
-          <p className="mt-6 font-mono text-xs text-muted-foreground">
+          <p className="text-muted-foreground mt-6 font-mono text-xs">
             AI generation lands with the rest of M6 &middot; see
             .agents/steps.md
           </p>

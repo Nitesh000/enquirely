@@ -114,7 +114,7 @@ export const blockSchema = z.discriminatedUnion("type", [
 export type FormBlock = z.infer<typeof blockSchema>;
 export type BlockType = FormBlock["type"];
 
-const conditionOperatorSchema = z.enum([
+export const conditionOperatorSchema = z.enum([
   "equals",
   "not_equals",
   "contains",
@@ -127,11 +127,15 @@ const conditionOperatorSchema = z.enum([
   "is_not_answered",
 ]);
 
-const conditionSchema = z.object({
+export type ConditionOperator = z.infer<typeof conditionOperatorSchema>;
+
+export const conditionSchema = z.object({
   blockId: z.string(),
   operator: conditionOperatorSchema,
   value: z.union([z.string(), z.number(), z.boolean()]).optional(),
 });
+
+export type Condition = z.infer<typeof conditionSchema>;
 
 /**
  * Compound grouping (`all` / `any`) is built in from M1 rather than
